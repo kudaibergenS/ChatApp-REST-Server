@@ -17,7 +17,6 @@ public class UserController {
         Map user = new HashMap();
         user.put("name", "test");
         user.put("age", 21);
-
     return user;
     }
 
