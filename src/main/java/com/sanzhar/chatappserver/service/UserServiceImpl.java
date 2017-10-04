@@ -15,6 +15,16 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Transactional
+    public User getUserByLoginAndPassword(String login, String password) {
+        return userRepository.getUserByLoginAndPassword(login, password);
+    }
+
+    @Transactional
+    public User getUserById(int id) {
+        return userRepository.getUserById(id);
+    }
+
+    @Transactional
     public List<User> getAllUsers() {
 
         return userRepository.getAllUsers();
