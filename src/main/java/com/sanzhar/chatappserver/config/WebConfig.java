@@ -12,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,15 +30,18 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authHandler())
             .addPathPatterns("/**")
-            .excludePathPatterns("/user/auth");
+            .excludePathPatterns("/user/image/*");
     }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setObjectMapper(new ObjectMapper());
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        converter.setObjectMapper(objectMapper);
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         converters.add(converter);
     }
+
 }

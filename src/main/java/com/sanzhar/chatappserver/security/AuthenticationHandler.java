@@ -20,7 +20,7 @@ public class AuthenticationHandler extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorization = request.getHeader("Authorization");
 
-        if(authorization != null     && authorization.startsWith("Basic")){
+        if(authorization != null && authorization.startsWith("Basic")){
             try {
                 String encodedUserCredentials = authorization.substring("Basic".length()).trim();
                 String decodedUserCredentials = new String(new BASE64Decoder().decodeBuffer(encodedUserCredentials));

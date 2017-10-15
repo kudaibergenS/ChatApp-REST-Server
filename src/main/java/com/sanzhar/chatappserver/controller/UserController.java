@@ -2,20 +2,18 @@ package com.sanzhar.chatappserver.controller;
 
 import com.sanzhar.chatappserver.model.User;
 import com.sanzhar.chatappserver.service.UserService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.HashMap;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
-import java.util.Map;
 
-@Controller
+@RestController
 @RequestMapping("user")
 public class UserController {
 
@@ -23,15 +21,24 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/auth/get", method = RequestMethod.GET)
-    public @ResponseBody User authorize(@RequestAttribute("user") User user) {
+    public User authorize(@RequestAttribute("user") User user) {
 
         return user;
     }
 
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    public @ResponseBody List<User> test() {
+    @RequestMapping(value = "/contacts", method = RequestMethod.GET)
+    public List<User> getUserContacts(@RequestAttribute("user") User user) {
 
-        return userService.getAllUsers();
+        return user.getUserContacts();
+    }
+
+    @RequestMapping(value = "/image/{uri:.+}", method = RequestMethod.GET)
+    public void getImage(@PathVariable("uri") String img_uri, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String uri = "/WEB-INF/resources/images/" + img_uri;
+
+        InputStream in = request.getServletContext().getResourceAsStream(uri);
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
+        IOUtils.copy(in, response.getOutputStream());
     }
 
 }
